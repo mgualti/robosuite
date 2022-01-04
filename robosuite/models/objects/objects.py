@@ -143,7 +143,7 @@ class MujocoObject(MujocoModel):
         self._actuators = [e.get("name") for e in _elements.get("actuators", [])]
         self._sites = [e.get("name") for e in _elements.get("sites", [])]
         self._sensors = [e.get("name") for e in _elements.get("sensors", [])]
-        self._contact_geoms = [e.get("name") for e in _elements.get("contact_geoms", [])]
+        self._contact_geoms = [e.get("name") for e in _elements.get("contact_geoms", []) if e.get("name") is not None]
         self._visual_geoms = [e.get("name") for e in _elements.get("visual_geoms", [])]
 
         # Add default materials if we're using domain randomization
@@ -363,9 +363,9 @@ class MujocoXMLObject(MujocoObject, MujocoXML):
             if not _should_keep(element):
                 parent.remove(element)
             else:
-                g_name = element.get("name")
-                g_name = g_name if g_name is not None else f"g{i}"
-                element.set("name", g_name)
+                #g_name = element.get("name")
+                #g_name = g_name if g_name is not None else f"g{i}"
+                #element.set("name", g_name)
                 # Also optionally duplicate collision geoms if requested (and this is a collision geom)
                 if self.duplicate_collision_geoms and element.get("group") in {None, "0"}:
                     parent.append(self._duplicate_visual_from_collision(element))
